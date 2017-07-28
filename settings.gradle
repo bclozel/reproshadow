@@ -1,0 +1,4 @@
+rootProject.name = 'reproshadow'
+include 'library'
+include 'core'
+include 'module'

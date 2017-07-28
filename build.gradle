@@ -1,0 +1,40 @@
+plugins {
+	id 'com.github.johnrengelman.shadow' version '2.0.1' apply false
+}
+
+configure(allprojects) { project ->
+
+	apply plugin: 'java'
+
+	compileJava {
+		sourceCompatibility = 1.8
+		targetCompatibility = 1.8
+		options.encoding = 'UTF-8'
+	}
+
+	repositories {
+		mavenLocal()
+		mavenCentral()
+	}
+}
+
+project("library") {
+
+}
+
+project("core") {
+	apply plugin: 'com.github.johnrengelman.shadow'
+	dependencies {
+		compile(project(":library"))
+	}
+	shadowJar {
+		relocate 'org.library', 'org.example.shadow'
+	}
+}
+
+project("module") {
+	dependencies {
+		compile project(path: ':core', configuration: 'shadow')
+		testCompile("junit:junit:4.12")
+	}
+}
